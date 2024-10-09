@@ -17,3 +17,13 @@ For 3D point in camera frame, depth information from the camera (Intel Realsense
 
 ### Eye-to-Hand Calibration:
 The calculated 3D grasp point is in camera frame, so in order for the robot to reach, the point must be in robot frame. This transformation is done by finding the transformation from base to camera (through hand-eye calibration).
+
+I have used OpenCV's hand-eye calibration function <a href="https://docs.opencv.org/4.5.4/d9/d0c/group__calib3d.html#gaebfc1c9f7434196a374c382abf43439b" target="_blank">cv2.calibrateHandEye()</a> for obtaining the transformation from base to camera (`Tb_c`).
+
+When a object is detected, its grasp point in camera frame is represented as `Tc_o` (transformation from camera to object). Transformation from base to camera is multiplied with transformation from camera to object to obtain `Tb_o` (Transformation from base to object).
+
+```math
+Tb_o = Tb_c  *  Tc_o
+```
+
+`Tb_o` is sent to robot's IK to pick the object.
